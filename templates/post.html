@@ -1,11 +1,24 @@
-<article>
-    <section class="header">
-        Posted on $date$
-        $if(author)$
-            by $author$
-        $endif$
-    </section>
-    <section>
-        $body$
-    </section>
+<article class="post">
+  <section class="post-header">
+    <h1 class="post-title">$title$</h1>
+    <div class="post-meta">
+      <time>$date$</time>
+      $if(tags)$
+        <span> • </span>
+        <span class="post-tags-section">
+          <svg class="post-tags-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            $include("include/tag.svg")$
+          </svg>
+        </span>
+        <ul class="post-tags">
+          $for(tags)$
+            <li><a class="post-tag" href="/tags#$tag$">$tag$</a></li>
+          $endfor$
+        </ul>
+      $endif$
+    </div>
+  </section>
+  <section>
+    $body$
+  </section>
 </article>

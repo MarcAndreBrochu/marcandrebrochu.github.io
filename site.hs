@@ -35,13 +35,23 @@ main = hakyllWith config $ do
             >>= loadAndApplyTemplate "templates/default.html" defaultContext'
             >>= relativizeUrls
 
+    -- Builds a map from tags to articles.
+    tags <- buildTags "posts/*" (fromCapture "tags/*.html")
+
     match "posts/*" $ do
         route $ setExtension "html"
-        compile $ pandocCompiler'
-            >>= saveSnapshot "content"
-            >>= loadAndApplyTemplate "templates/post.html" postCtx
-            >>= loadAndApplyTemplate "templates/default.html" postCtx
-            >>= relativizeUrls
+        compile $ do
+            let whewCtx =
+                   -- listFieldWith "tags" (field "tag" (return . itemBody)) (\item -> do
+                   --     tags <- getTags (itemIdentifier item)
+                   --     sequence $ fmap makeItem tags
+                   -- ) <>
+                    defaultContext'
+            pandocCompiler'
+                >>= saveSnapshot "content"
+                >>= loadAndApplyTemplate "templates/post.html" (whewCtx <> postCtx)
+                >>= loadAndApplyTemplate "templates/default.html" postCtx
+                >>= relativizeUrls
 
     create ["archive.html"] $ do
         route idRoute

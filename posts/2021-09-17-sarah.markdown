@@ -1,5 +1,6 @@
 ---
 title: Sarah l'ours
+tags: cool, animaux forestiers, jungle
 ---
 
 Je veux vous raconter l'histoire............
