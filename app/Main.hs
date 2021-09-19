@@ -4,10 +4,8 @@ module Main where
 
 import Blog.Tags
 import Data.Bifunctor (second)
-import Data.List (intersperse)
 import Data.Monoid ((<>))
 import Hakyll
-import Hakyll.Core.Compiler.Internal (compilerUnsafeIO)
 import Text.Pandoc.Highlighting (Style, breezeDark, styleToCss)
 import Text.Pandoc.Options (ReaderOptions(..), WriterOptions(..))
 
