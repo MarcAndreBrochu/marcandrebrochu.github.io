@@ -31,7 +31,7 @@ main = hakyllWith config $ do
         compile $ do
             makeItem $ styleToCss pandocCodeStyle
 
-    match (fromList ["about.rst", "contact.markdown"]) $ do
+    match "about.md" $ do
         route $ setExtension "html"
         compile $ pandocCompiler'
             >>= loadAndApplyTemplate "templates/default.html" blogCtx

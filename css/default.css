@@ -185,11 +185,17 @@ abbr[title] {
   opacity: .5
 }
 
-.nav-list {
-  padding:0;
+.nav {
   margin: var(--spacer) 0 0 0;
   border-top: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
+  display: flex;
+}
+
+.nav-list {
+  padding:0;
+  margin: 0;
+  margin-right: auto;
   list-style: none
 }
 
@@ -354,20 +360,23 @@ a[href^="#fn:"], a[href^="#fnref:"] {
 }
 
 .social-icons {
-  list-style: none;
   padding: 0;
-  margin: var(--spacer) 0;
-  height: calc(var(--body-line-height) * var(--body-font-size))
+  margin: 0;
+  height: 19px;
+  align-self: center;
 }
 
-.social-icon-item {
-  float: left;
-  margin-right: var(--spacer)
+.social-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
 }
 
 .social-icon > svg {
   width: 16px;
   height: 16px;
+  fill: var(--body-color);
 }
 
 @media screen and (min-width: 48rem) {
