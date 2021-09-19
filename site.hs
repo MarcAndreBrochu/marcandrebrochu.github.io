@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+import Data.List (intersperse)
 import Data.Monoid ((<>))
 import Hakyll
 import Hakyll.Core.Compiler.Internal (compilerUnsafeIO)
@@ -32,24 +33,18 @@ main = hakyllWith config $ do
     match (fromList ["about.rst", "contact.markdown"]) $ do
         route $ setExtension "html"
         compile $ pandocCompiler'
-            >>= loadAndApplyTemplate "templates/default.html" defaultContext'
+            >>= loadAndApplyTemplate "templates/default.html" blogCtx
             >>= relativizeUrls
 
-    -- Builds a map from tags to articles.
-    tags <- buildTags "posts/*" (fromCapture "tags/*.html")
+    -- Builds a map from tags to posts with that tag.
+    --tags <- buildTags "posts/*" (fromCapture "tags/*.html")
 
     match "posts/*" $ do
         route $ setExtension "html"
         compile $ do
-            let whewCtx =
-                   -- listFieldWith "tags" (field "tag" (return . itemBody)) (\item -> do
-                   --     tags <- getTags (itemIdentifier item)
-                   --     sequence $ fmap makeItem tags
-                   -- ) <>
-                    defaultContext'
             pandocCompiler'
                 >>= saveSnapshot "content"
-                >>= loadAndApplyTemplate "templates/post.html" (whewCtx <> postCtx)
+                >>= loadAndApplyTemplateWithTags "templates/post.html" postCtx
                 >>= loadAndApplyTemplate "templates/default.html" postCtx
                 >>= relativizeUrls
 
@@ -60,7 +55,7 @@ main = hakyllWith config $ do
             let archiveCtx =
                     listField "posts" postCtx (return posts) <>
                     constField "title" "Archives" <>
-                    defaultContext'
+                    blogCtx
 
             makeItem ""
                 >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
@@ -70,14 +65,14 @@ main = hakyllWith config $ do
     match "index.html" $ do
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
-            let firstPosts = take 2 posts
-                listCtx =
+            let recentPosts n = take n <$> (loadAll "posts/*" >>= recentFirst)
+            posts <- recentPosts 2
+            let listCtx =
                     teaserField "excerpt" "content" <>
                     postCtx
                 indexCtx =
-                    listField "posts" listCtx (return firstPosts) <>
-                    defaultContext'
+                    listField "posts" listCtx (return posts) <>
+                    blogCtx
 
             getResourceBody
                 >>= applyAsTemplate indexCtx
@@ -86,15 +81,39 @@ main = hakyllWith config $ do
 
     match "templates/*" $ compile templateBodyCompiler
 
-defaultContext' :: Context String
-defaultContext' =
-    functionField "include" includeFiles <>
+    match "snippets/*" $ compile getResourceBody
+
+-- Only add a tags field if one is present in the metadata.
+loadAndApplyTemplateWithTags :: Identifier -> Context a -> Item a -> Compiler (Item String)
+loadAndApplyTemplateWithTags tid ctx item = hasTags item >>= withTags
+  where
+    hasTags = (fmap (not . null)) . (getTags . itemIdentifier)
+
+    withTags False = loadAndApplyTemplate tid ctx item
+    withTags True  = loadAndApplyTemplate tid (tagsListField <> ctx) item
+
+blogCtx :: Context String
+blogCtx =
+    snippetField <>
     defaultContext
 
 postCtx :: Context String
 postCtx =
     dateField "date" "%B %e, %Y" <>
-    defaultContext'
+    blogCtx
+
+getNormalizedTags :: MonadMetadata m => Item a -> m [String]
+getNormalizedTags item =
+    fmap normalizeTag <$> (getTags . itemIdentifier) item
+  where
+    normalizeTag = concat . intersperse "-" . words
+
+tagsListField :: Context a
+tagsListField =
+    listFieldWith "tags" (field "tag" tag) tags
+  where
+    tag = pure . itemBody
+    tags item = getNormalizedTags item >>= (sequence . fmap makeItem)
 
 pandocCompiler' :: Compiler (Item String)
 pandocCompiler' = pandocCompilerWith
@@ -102,8 +121,3 @@ pandocCompiler' = pandocCompilerWith
     defaultHakyllWriterOptions
         { writerHighlightStyle = Just pandocCodeStyle
         }
-
-includeFiles :: [String] -> Item a -> Compiler String
-includeFiles files _ = compilerUnsafeIO $ do
-    contents <- sequence $ fmap readFile files
-    return $ concat contents
