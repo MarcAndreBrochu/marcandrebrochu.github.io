@@ -31,12 +31,6 @@ main = hakyllWith config $ do
         compile $ do
             makeItem $ styleToCss pandocCodeStyle
 
-    match "about.md" $ do
-        route $ setExtension "html"
-        compile $ pandocCompiler'
-            >>= loadAndApplyTemplate "templates/default.html" blogCtx
-            >>= relativizeUrls
-
     -- Builds a map from tags to posts with that tag.
     tags <- buildTagsWith getNormalizedTags "posts/*" (fromCapture "tags/*")
 
