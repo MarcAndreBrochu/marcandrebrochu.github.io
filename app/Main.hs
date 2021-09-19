@@ -2,6 +2,7 @@
 
 module Main where
 
+import Blog.Tags
 import Data.Bifunctor (second)
 import Data.List (intersperse)
 import Data.Monoid ((<>))
@@ -110,15 +111,6 @@ main = hakyllWith config $ do
 
     match "snippets/*" $ compile getResourceBody
 
--- Only add a tags field if one is present in the metadata.
-loadAndApplyTemplateWithTags :: Identifier -> Context a -> Item a -> Compiler (Item String)
-loadAndApplyTemplateWithTags tid ctx item = hasTags item >>= withTags
-  where
-    hasTags = (fmap (not . null)) . (getTags . itemIdentifier)
-
-    withTags False = loadAndApplyTemplate tid ctx item
-    withTags True  = loadAndApplyTemplate tid (tagsListField <> ctx) item
-
 blogCtx :: Context String
 blogCtx =
     snippetField <>
@@ -128,20 +120,6 @@ postCtx :: Context String
 postCtx =
     dateField "date" "%B %e, %Y" <>
     blogCtx
-
-getNormalizedTags :: MonadMetadata m => Identifier -> m [String]
-getNormalizedTags id = do
-    tags <- getTags id
-    pure $ normalizeTag <$> tags
-  where
-    normalizeTag = concat . intersperse "-" . words
-
-tagsListField :: Context a
-tagsListField =
-    listFieldWith "tags" (field "tag" tag) tags
-  where
-    tag = pure . itemBody
-    tags item = (getNormalizedTags . itemIdentifier) item >>= (sequence . fmap makeItem)
 
 pandocCompiler' :: Compiler (Item String)
 pandocCompiler' = pandocCompilerWith

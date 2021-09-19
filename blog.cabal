@@ -9,6 +9,8 @@ version:        0.0.0
 build-type:     Simple
 
 library
+  exposed-modules:
+      Blog.Tags
   hs-source-dirs:
       src
   build-depends:
