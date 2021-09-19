@@ -7,6 +7,7 @@ dependencies:
 
 library:
   source-dirs: src
+  other-modules: []
 
 executables:
   blog:
@@ -18,3 +19,5 @@ executables:
       - -with-rtsopts=-N
     dependencies:
       - blog
+    other-modules: []
+
