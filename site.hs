@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+import Data.Bifunctor (second)
 import Data.List (intersperse)
 import Data.Monoid ((<>))
 import Hakyll
@@ -37,7 +38,36 @@ main = hakyllWith config $ do
             >>= relativizeUrls
 
     -- Builds a map from tags to posts with that tag.
-    --tags <- buildTags "posts/*" (fromCapture "tags/*.html")
+    tags <- buildTagsWith getNormalizedTags "posts/*" (fromCapture "tags/*")
+
+    tagsRules tags $ \tag pattern -> compile $ do
+        posts <- recentFirst =<< loadAll pattern
+        let ctx =
+                listField "posts" postCtx (return posts) <>
+                constField "tag" tag <>
+                blogCtx
+        makeItem ""
+            >>= loadAndApplyTemplate "templates/tag.html" ctx
+            >>= relativizeUrls
+
+    create ["tags.html"] $ do
+        route idRoute
+        compile $ do
+            x <- loadAll "tags/*" >>= pure . concat . (fmap itemBody)
+            let ctx = constField "title" "Tags" <> blogCtx
+                tagsCtx =
+                    listField "tags"
+                        (field "tag" tagName <> field "tag-count" tagCount)
+                        (traverse (makeItem . (second length)) (tagsMap tags)) <>
+                    constField "contents" x <>
+                    blogCtx
+                  where
+                    tagName = pure . fst . itemBody
+                    tagCount = pure . show . snd . itemBody
+            makeItem ""
+                >>= loadAndApplyTemplate "templates/tags.html" tagsCtx
+                >>= loadAndApplyTemplate "templates/default.html" ctx
+                >>= relativizeUrls
 
     match "posts/*" $ do
         route $ setExtension "html"
@@ -102,9 +132,10 @@ postCtx =
     dateField "date" "%B %e, %Y" <>
     blogCtx
 
-getNormalizedTags :: MonadMetadata m => Item a -> m [String]
-getNormalizedTags item =
-    fmap normalizeTag <$> (getTags . itemIdentifier) item
+getNormalizedTags :: MonadMetadata m => Identifier -> m [String]
+getNormalizedTags id = do
+    tags <- getTags id
+    pure $ normalizeTag <$> tags
   where
     normalizeTag = concat . intersperse "-" . words
 
@@ -113,7 +144,7 @@ tagsListField =
     listFieldWith "tags" (field "tag" tag) tags
   where
     tag = pure . itemBody
-    tags item = getNormalizedTags item >>= (sequence . fmap makeItem)
+    tags item = (getNormalizedTags . itemIdentifier) item >>= (sequence . fmap makeItem)
 
 pandocCompiler' :: Compiler (Item String)
 pandocCompiler' = pandocCompilerWith

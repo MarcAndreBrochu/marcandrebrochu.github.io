@@ -1,6 +1,7 @@
 ---
 title: Tu Quoque
 author: Julius
+tags: un, deux, trois, marmelade au fromage, un petit tag, animaux forestiers
 ---
 
 Vestibulum leo turpis, dignissim quis ultrices sit amet, iaculis ac ligula.
