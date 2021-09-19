@@ -1,0 +1,34 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.4.
+--
+-- see: https://github.com/sol/hpack
+
+name:           blog
+version:        0.0.0
+build-type:     Simple
+
+library
+  other-modules:
+      Paths_blog
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , hakyll ==4.14.1.0
+    , pandoc
+  default-language: Haskell2010
+
+executable blog
+  main-is: Main.hs
+  other-modules:
+      Paths_blog
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , blog
+    , hakyll ==4.14.1.0
+    , pandoc
+  default-language: Haskell2010

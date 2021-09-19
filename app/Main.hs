@@ -1,5 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+module Main where
+
 import Data.Bifunctor (second)
 import Data.List (intersperse)
 import Data.Monoid ((<>))
@@ -14,6 +16,7 @@ pandocCodeStyle = breezeDark
 config :: Configuration
 config = defaultConfiguration
     { destinationDirectory = "docs"
+    , providerDirectory = "site"
     }
 
 main :: IO ()

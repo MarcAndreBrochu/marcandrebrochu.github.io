@@ -1,0 +1,20 @@
+name: blog
+
+dependencies:
+  - base >= 4.7 && < 5
+  - hakyll == 4.14.1.0
+  - pandoc
+
+library:
+  source-dirs: src
+
+executables:
+  blog:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - blog
