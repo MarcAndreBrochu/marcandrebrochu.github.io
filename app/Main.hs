@@ -1,10 +1,16 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ImportQualifiedPost #-}
+{-# LANGUAGE TupleSections #-}
 
 module Main where
 
 import Blog.Tags
+import Control.Monad (foldM, forM_)
 import Data.Bifunctor (second)
+import Data.Map qualified as M
 import Data.Monoid ((<>))
+import Data.Time.Format (formatTime)
+import Data.Time.Locale.Compat (TimeLocale, defaultTimeLocale)
 import Hakyll
 import Text.Pandoc.Highlighting (Style, breezeDark, styleToCss)
 import Text.Pandoc.Options (ReaderOptions(..), WriterOptions(..))
@@ -17,6 +23,37 @@ config = defaultConfiguration
     { destinationDirectory = "docs"
     , providerDirectory = "site"
     }
+
+data Years = Years
+    { yearsMap :: [(String, [Identifier])]
+    , yearsMakeId :: String -> Identifier
+    }
+
+getYear :: (MonadMetadata m, MonadFail m) => Identifier -> m String
+getYear id = do
+    timeUTC <- getItemUTC locale id
+    return $ formatTime locale "%Y" timeUTC
+  where
+    locale = defaultTimeLocale
+
+buildYears :: (MonadMetadata m, MonadFail m) => Pattern -> (String -> Identifier) -> m Years
+buildYears pattern makeId = do
+    ids <- getMatches pattern
+    yearsMap <- foldM addYears M.empty ids
+    return $ Years (M.toList yearsMap) makeId
+  where
+    addYears yearsMap id' = do
+        year <- getYear id'
+        return $ M.insertWith (++) year [id'] yearsMap
+
+yearsRules :: Years -> (String -> Pattern -> Rules ()) -> Rules ()
+yearsRules years rules = do
+    forM_ (yearsMap years) $ \(year, identifiers) ->
+        create [yearsMakeId years year] $
+            rules year (fromList identifiers)
+
+recentYearsFirst :: [Item String] -> Compiler [Item String]
+recentYearsFirst = undefined
 
 main :: IO ()
 main = hakyllWith config $ do
@@ -32,6 +69,39 @@ main = hakyllWith config $ do
         route idRoute
         compile $ do
             makeItem $ styleToCss pandocCodeStyle
+
+    years <- buildYears "posts/*" (fromCapture "years/*")
+
+    yearsRules years $ \year pattern -> compile $ do
+        posts <- recentFirst =<< loadAll pattern
+        let yearCtx =
+                listField "posts" postCtx (return posts) <>
+                constField "year" year <>
+                blogCtx
+        makeItem ""
+            >>= loadAndApplyTemplate "templates/year.html" yearCtx
+            >>= relativizeUrls
+
+    create ["archive.html"] $ do
+        route idRoute
+        compile $ do
+            x <- loadAll "years/*"
+                    -- >>= recentYearsFirst
+                    >>= pure . concat . (fmap itemBody)
+            let ctx = constField "title" "Archive" <> blogCtx
+                yearsCtx =
+                    listField "years"
+                        (field "year" yearName <> field "year-count" yearCount)
+                        (traverse (makeItem . (second length)) (yearsMap years)) <>
+                    constField "contents" x <>
+                    ctx
+                  where
+                    yearName = pure . fst . itemBody
+                    yearCount = pure . show . snd . itemBody
+            makeItem ""
+                >>= loadAndApplyTemplate "templates/archive.html" yearsCtx
+                >>= loadAndApplyTemplate "templates/default.html" ctx
+                >>= relativizeUrls
 
     -- Builds a map from tags to posts with that tag.
     tags <- buildTagsWith getNormalizedTags "posts/*" (fromCapture "tags/*")
@@ -56,7 +126,7 @@ main = hakyllWith config $ do
                         (field "tag" tagName <> field "tag-count" tagCount)
                         (traverse (makeItem . (second length)) (tagsMap tags)) <>
                     constField "contents" x <>
-                    blogCtx
+                    ctx
                   where
                     tagName = pure . fst . itemBody
                     tagCount = pure . show . snd . itemBody
@@ -72,20 +142,6 @@ main = hakyllWith config $ do
                 >>= saveSnapshot "content"
                 >>= loadAndApplyTemplateWithTags "templates/post.html" postCtx
                 >>= loadAndApplyTemplate "templates/default.html" postCtx
-                >>= relativizeUrls
-
-    create ["archive.html"] $ do
-        route idRoute
-        compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
-            let archiveCtx =
-                    listField "posts" postCtx (return posts) <>
-                    constField "title" "Archives" <>
-                    blogCtx
-
-            makeItem ""
-                >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
-                >>= loadAndApplyTemplate "templates/default.html" archiveCtx
                 >>= relativizeUrls
 
     match "index.html" $ do

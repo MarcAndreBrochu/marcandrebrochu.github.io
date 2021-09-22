@@ -1,1 +1,16 @@
-Here you can find all my previous posts:
+<article>
+  <h1>$title$</h1>
+  <div class="taxonomies-wrapper">
+    <ul class="taxonomies">
+      $for(years)$
+        <li>
+          <a class="taxonomy" href="/archive.html#$year$">
+            <span>$year$</span>
+            <span class="taxonomy-count">$year-count$</span>
+          </a>
+        </li>
+      $endfor$
+    </ul>
+  </div>
+  $contents$
+</article>
