@@ -42,6 +42,20 @@ buildYears items = do
         year <- getYear (itemIdentifier item)
         return $ M.insertWith (++) year [item] years
 
+archiveCtx :: [(Year, [Item String])] -> Context String
+archiveCtx years =
+    listField "years" yearsCtx (sequence $ makeItem <$> years) <>
+    constField "title" "Archive" <>
+    blogCtx
+  where
+    yearsCtx =
+        field "year" (pure . show . fst . itemBody) <>
+        field "year-count" (pure . show .length . snd . itemBody) <>
+        listFieldWith "posts" postsCtx (pure . snd . itemBody)
+    postsCtx =
+        dateField "date" "%B %e" <>
+        defaultContext
+
 main :: IO ()
 main = hakyllWith config $ do
     match "images/*" $ do
@@ -62,17 +76,9 @@ main = hakyllWith config $ do
         compile $ do
             posts <- loadAll "posts/*"
             years <- (reverse . sortOn fst) <$> buildYears posts
-            let ctx = constField "title" "Archive" <> blogCtx
-                archiveCtx =
-                    listField "years"
-                        (field "year" (return . show . fst . itemBody) <>
-                         field "year-count" (pure . show . length . snd . itemBody) <>
-                         listFieldWith "posts" (dateField "date" "%B %e" <> defaultContext) (pure . snd . itemBody)
-                        )
-                        (sequence $ makeItem <$> years)
-                    <> ctx
+            let ctx = archiveCtx years
             makeItem ""
-                >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
+                >>= loadAndApplyTemplate "templates/archive.html" ctx
                 >>= loadAndApplyTemplate "templates/default.html" ctx
                 >>= relativizeUrls
 
