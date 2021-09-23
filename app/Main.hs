@@ -146,7 +146,9 @@ main = hakyllWith config $ do
     match "snippets/*" $ compile getResourceBody
 
 loadRecent :: (Binary a, Typeable a) => Int -> Pattern -> Compiler [Item a]
-loadRecent n p = loadAll p >>= recentFirst >>= pure . (take n)
+loadRecent n p = loadAll p
+    >>= recentFirst
+    >>= pure . (take n)
 
 blogCtx :: Context String
 blogCtx =
