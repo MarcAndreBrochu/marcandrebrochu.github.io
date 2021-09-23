@@ -4,6 +4,8 @@
 
 module Main where
 
+import Debug.Trace
+
 import Blog.Tags
 import Control.Monad (foldM, forM_)
 import Data.Bifunctor (second)
@@ -53,7 +55,20 @@ yearsRules years rules = do
             rules year (fromList identifiers)
 
 recentYearsFirst :: [Item String] -> Compiler [Item String]
-recentYearsFirst = undefined
+recentYearsFirst = do
+    pure
+
+makeYearsScore :: Years -> M.Map Identifier Int
+makeYearsScore years = foldr addYear M.empty keys
+  where
+    keys :: [String]
+    keys = fmap fst (yearsMap years)
+
+    makeId :: String -> Identifier
+    makeId = yearsMakeId years
+
+    addYear :: String -> M.Map Identifier Int -> M.Map Identifier Int
+    addYear n scores = M.insert (makeId n) (read n :: Int) scores
 
 main :: IO ()
 main = hakyllWith config $ do
@@ -72,6 +87,8 @@ main = hakyllWith config $ do
 
     years <- buildYears "posts/*" (fromCapture "years/*")
 
+    traceShow (makeYearsScore years) $ return ()
+
     yearsRules years $ \year pattern -> compile $ do
         posts <- recentFirst =<< loadAll pattern
         let yearCtx =
@@ -86,7 +103,7 @@ main = hakyllWith config $ do
         route idRoute
         compile $ do
             x <- loadAll "years/*"
-                    -- >>= recentYearsFirst
+                    >>= recentYearsFirst
                     >>= pure . concat . (fmap itemBody)
             let ctx = constField "title" "Archive" <> blogCtx
                 yearsCtx =
