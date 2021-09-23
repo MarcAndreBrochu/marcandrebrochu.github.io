@@ -2,4 +2,6 @@
 
 stack build
 stack exec blog rebuild
-stack exec blog watch
+if [ $? -eq 0 ]; then
+  stack exec blog watch
+fi
