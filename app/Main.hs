@@ -4,8 +4,6 @@
 
 module Main where
 
-import Debug.Trace
-
 import Blog.Tags
 import Control.Monad (foldM, forM_)
 import Data.Bifunctor (second)
