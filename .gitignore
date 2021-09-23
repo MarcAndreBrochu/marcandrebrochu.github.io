@@ -1,3 +1,4 @@
 _cache/
 .stack-work/
 *.swp
+blog.cabal
