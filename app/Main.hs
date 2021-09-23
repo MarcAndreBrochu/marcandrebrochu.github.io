@@ -1,6 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ImportQualifiedPost #-}
-{-# LANGUAGE TupleSections #-}
 
 module Main where
 
