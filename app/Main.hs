@@ -36,32 +36,14 @@ getYear articleId = do
   where
     locale = defaultTimeLocale
 
-data Article = Article
-    { articleDate :: String
-    , articleUrl :: String
-    , articleTitle :: String
-    , articleId :: Identifier
-    }
-
-buildYears :: [Item String] -> Compiler [(Year, [Article])]
+buildYears :: [Item a] -> Compiler [(Year, [Item a])]
 buildYears items = do
-    let ids = itemIdentifier <$> items
-    y <- foldM addYear M.empty ids
+    y <- foldM addYear M.empty items
     pure $ M.toList y
   where
-    addYear years id = do
-        year <- getYear id
-        title <- getMetadataField' id "title"
-        utc <- getItemUTC defaultTimeLocale id
-        let empty' = fail $ "No route url found for item " ++ show id
-        route <- fmap (maybe empty' toUrl) $ getRoute id
-        let article = Article
-                    { articleDate = formatTime defaultTimeLocale "%F" utc
-                    , articleUrl = route
-                    , articleTitle = title
-                    , articleId = id
-                    }
-        return $ M.insertWith (++) year [article] years
+    addYear years item = do
+        year <- getYear (itemIdentifier item)
+        return $ M.insertWith (++) year [item] years
 
 sortYears :: [(Year, a)] -> [(Year, a)]
 sortYears = reverse . sortOn fst
@@ -95,11 +77,7 @@ main = hakyllWith config $ do
                     listField "years"
                         (field "year" (return . show . fst . itemBody) <>
                          field "year-count" (pure . show . length . snd . itemBody) <>
-                         listFieldWith "posts"
-                            (field "date" (return . articleDate . itemBody) <>
-                             field "url" (return . articleUrl . itemBody) <>
-                             field "title" (return . articleTitle . itemBody))
-                            (\item -> sequence $ makeItem <$> (snd . itemBody) item)
+                         listFieldWith "posts" (dateField "date" "%B %e" <> defaultContext) (pure . snd . itemBody)
                         )
                         (sequence $ makeItem <$> years)
                     <> ctx
