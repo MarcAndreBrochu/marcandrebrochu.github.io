@@ -12,5 +12,15 @@
       $endfor$
     </ul>
   </div>
-  $contents$
+  $for(years)$
+    <h2 id="$year$">$year$</h2>
+    <ul class="post-list-by-taxonomy">
+      $for(posts)$
+        <li>
+          <time>$date$</time>
+          <a href="$url$">$title$</a>
+        </li>
+      $endfor$
+    </ul>
+  $endfor$
 </article>

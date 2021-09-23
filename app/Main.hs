@@ -9,6 +9,7 @@ import Debug.Trace
 import Blog.Tags
 import Control.Monad (foldM, forM_)
 import Data.Bifunctor (second)
+import Data.List (sortOn)
 import Data.Map qualified as M
 import Data.Monoid ((<>))
 import Data.Time.Format (formatTime)
@@ -26,49 +27,44 @@ config = defaultConfiguration
     , providerDirectory = "site"
     }
 
-data Years = Years
-    { yearsMap :: [(String, [Identifier])]
-    , yearsMakeId :: String -> Identifier
-    }
+type Year = Int
 
-getYear :: (MonadMetadata m, MonadFail m) => Identifier -> m String
-getYear id = do
-    timeUTC <- getItemUTC locale id
-    return $ formatTime locale "%Y" timeUTC
+getYear :: (MonadMetadata m, MonadFail m) => Identifier -> m Year
+getYear articleId = do
+    timeUTC <- getItemUTC locale articleId
+    return $ read $ formatTime locale "%Y" timeUTC
   where
     locale = defaultTimeLocale
 
-buildYears :: (MonadMetadata m, MonadFail m) => Pattern -> (String -> Identifier) -> m Years
-buildYears pattern makeId = do
-    ids <- getMatches pattern
-    yearsMap <- foldM addYears M.empty ids
-    return $ Years (M.toList yearsMap) makeId
+data Article = Article
+    { articleDate :: String
+    , articleUrl :: String
+    , articleTitle :: String
+    , articleId :: Identifier
+    }
+
+buildYears :: [Item String] -> Compiler [(Year, [Article])]
+buildYears items = do
+    let ids = itemIdentifier <$> items
+    y <- foldM addYear M.empty ids
+    pure $ M.toList y
   where
-    addYears yearsMap id' = do
-        year <- getYear id'
-        return $ M.insertWith (++) year [id'] yearsMap
+    addYear years id = do
+        year <- getYear id
+        title <- getMetadataField' id "title"
+        utc <- getItemUTC defaultTimeLocale id
+        let empty' = fail $ "No route url found for item " ++ show id
+        route <- fmap (maybe empty' toUrl) $ getRoute id
+        let article = Article
+                    { articleDate = formatTime defaultTimeLocale "%F" utc
+                    , articleUrl = route
+                    , articleTitle = title
+                    , articleId = id
+                    }
+        return $ M.insertWith (++) year [article] years
 
-yearsRules :: Years -> (String -> Pattern -> Rules ()) -> Rules ()
-yearsRules years rules = do
-    forM_ (yearsMap years) $ \(year, identifiers) ->
-        create [yearsMakeId years year] $
-            rules year (fromList identifiers)
-
-recentYearsFirst :: [Item String] -> Compiler [Item String]
-recentYearsFirst = do
-    pure
-
-makeYearsScore :: Years -> M.Map Identifier Int
-makeYearsScore years = foldr addYear M.empty keys
-  where
-    keys :: [String]
-    keys = fmap fst (yearsMap years)
-
-    makeId :: String -> Identifier
-    makeId = yearsMakeId years
-
-    addYear :: String -> M.Map Identifier Int -> M.Map Identifier Int
-    addYear n scores = M.insert (makeId n) (read n :: Int) scores
+sortYears :: [(Year, a)] -> [(Year, a)]
+sortYears = reverse . sortOn fst
 
 main :: IO ()
 main = hakyllWith config $ do
@@ -85,38 +81,30 @@ main = hakyllWith config $ do
         compile $ do
             makeItem $ styleToCss pandocCodeStyle
 
-    years <- buildYears "posts/*" (fromCapture "years/*")
-
-    traceShow (makeYearsScore years) $ return ()
-
-    yearsRules years $ \year pattern -> compile $ do
-        posts <- recentFirst =<< loadAll pattern
-        let yearCtx =
-                listField "posts" postCtx (return posts) <>
-                constField "year" year <>
-                blogCtx
-        makeItem ""
-            >>= loadAndApplyTemplate "templates/year.html" yearCtx
-            >>= relativizeUrls
-
     create ["archive.html"] $ do
         route idRoute
         compile $ do
-            x <- loadAll "years/*"
-                    >>= recentYearsFirst
-                    >>= pure . concat . (fmap itemBody)
+            posts <- loadAll "posts/*"
+            years' <- buildYears posts
+            let years = sortYears years'
+            -- [(year, [article info])] (sorted starting at 2021, 2020, 2019, ...)
+            -- year (String) -> [article info]
+            -- article info (???) -> date, title, url
             let ctx = constField "title" "Archive" <> blogCtx
-                yearsCtx =
+                archiveCtx =
                     listField "years"
-                        (field "year" yearName <> field "year-count" yearCount)
-                        (traverse (makeItem . (second length)) (yearsMap years)) <>
-                    constField "contents" x <>
-                    ctx
-                  where
-                    yearName = pure . fst . itemBody
-                    yearCount = pure . show . snd . itemBody
+                        (field "year" (return . show . fst . itemBody) <>
+                         field "year-count" (pure . show . length . snd . itemBody) <>
+                         listFieldWith "posts"
+                            (field "date" (return . articleDate . itemBody) <>
+                             field "url" (return . articleUrl . itemBody) <>
+                             field "title" (return . articleTitle . itemBody))
+                            (\item -> sequence $ makeItem <$> (snd . itemBody) item)
+                        )
+                        (sequence $ makeItem <$> years)
+                    <> ctx
             makeItem ""
-                >>= loadAndApplyTemplate "templates/archive.html" yearsCtx
+                >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
                 >>= loadAndApplyTemplate "templates/default.html" ctx
                 >>= relativizeUrls
 
