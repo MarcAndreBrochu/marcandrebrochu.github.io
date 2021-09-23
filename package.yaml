@@ -4,6 +4,7 @@ dependencies:
   - base >= 4.7 && < 5
   - hakyll == 4.14.1.0
   - containers
+  - binary
   - time-locale-compat
   - time
   - pandoc

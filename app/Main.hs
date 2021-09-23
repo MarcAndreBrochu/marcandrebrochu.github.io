@@ -6,11 +6,13 @@ module Main where
 import Blog.Tags
 import Control.Monad (foldM, forM_)
 import Data.Bifunctor (second)
+import Data.Binary (Binary)
 import Data.List (sortOn)
 import Data.Map qualified as M
 import Data.Monoid ((<>))
 import Data.Time.Format (formatTime)
 import Data.Time.Locale.Compat (TimeLocale, defaultTimeLocale)
+import Data.Typeable (Typeable)
 import Hakyll
 import Text.Pandoc.Highlighting (Style, breezeDark, styleToCss)
 import Text.Pandoc.Options (ReaderOptions(..), WriterOptions(..))
@@ -126,8 +128,7 @@ main = hakyllWith config $ do
     match "index.html" $ do
         route idRoute
         compile $ do
-            let recentPosts n = take n <$> (loadAll "posts/*" >>= recentFirst)
-            posts <- recentPosts 2
+            posts <- loadRecent 2 "posts/*"
             let listCtx =
                     teaserField "excerpt" "content" <>
                     postCtx
@@ -143,6 +144,9 @@ main = hakyllWith config $ do
     match "templates/*" $ compile templateBodyCompiler
 
     match "snippets/*" $ compile getResourceBody
+
+loadRecent :: (Binary a, Typeable a) => Int -> Pattern -> Compiler [Item a]
+loadRecent n p = loadAll p >>= recentFirst >>= pure . (take n)
 
 blogCtx :: Context String
 blogCtx =
