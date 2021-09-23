@@ -43,9 +43,6 @@ buildYears items = do
         year <- getYear (itemIdentifier item)
         return $ M.insertWith (++) year [item] years
 
-sortYears :: [(Year, a)] -> [(Year, a)]
-sortYears = reverse . sortOn fst
-
 main :: IO ()
 main = hakyllWith config $ do
     match "images/*" $ do
@@ -65,11 +62,7 @@ main = hakyllWith config $ do
         route idRoute
         compile $ do
             posts <- loadAll "posts/*"
-            years' <- buildYears posts
-            let years = sortYears years'
-            -- [(year, [article info])] (sorted starting at 2021, 2020, 2019, ...)
-            -- year (String) -> [article info]
-            -- article info (???) -> date, title, url
+            years <- (reverse . sortOn fst) <$> buildYears posts
             let ctx = constField "title" "Archive" <> blogCtx
                 archiveCtx =
                     listField "years"
