@@ -7,8 +7,8 @@
   --body-line-height: 1.5;
   --border-radius: .4em;
   --code-font-family: monospace;
-  --body-bg-color: #121212;
-  --body-color: #ffffff;
+  --body-bg-color: #fff;
+  --body-color: #121212;
   --code-bg-color: #f1f3f5;
   --heading-color: #bb86fc;
   --border-color: #ced4da;
@@ -68,7 +68,19 @@ img {
   max-width: 100%;
   margin-top: 0;
   margin-bottom: var(--spacer);
-  border-radius: var(--border-radius)
+}
+
+.inline-math, .display-math {
+  margin: 0;
+}
+
+.inline-math {
+  display: inline;
+}
+
+.display-math {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 code, pre {

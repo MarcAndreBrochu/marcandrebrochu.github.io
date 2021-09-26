@@ -3,6 +3,12 @@ title: Sarah l'ours
 tags: cool, animaux forestiers, jungle
 ---
 
-Je veux vous raconter l'histoire............
+Je veux vous raconter $2+2=4$ l'histoire............
 
 <!--more-->
+
+$$\int_0^\infty \frac{sin(x)}{x}dx$$
+
+$$\int_0^\infty \frac{cos(x)}{xdx$$
+
+$$\int_0^\infty \frac{tan(x)}{x}dx$$
