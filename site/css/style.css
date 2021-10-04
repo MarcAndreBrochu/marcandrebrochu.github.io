@@ -60,6 +60,10 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
 }
 
+code, pre {
+  font-family: IosevkaReg;
+}
+
 #main-content {
   margin-left: var(--sidenav-width);
 }
