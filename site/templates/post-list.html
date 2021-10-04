@@ -1,11 +1,14 @@
 $for(posts)$
-  <div class="post">
+  <div class="post-list-item">
     <h2 class="post-title">
       <a href="$url$">$title$</a>
     </h2>
-    <time class="post-meta">$date$</time>
-    <p class="post-excerpt">
-      $excerpt$
-    </p>
+    <time class="post-date">$date$</time>
+    <div class="post-box">
+      <div class="post-excerpt">
+        $excerpt$
+      </div>
+      <a class="post-cta" href="$url$">Lire plus</a>
+    </div>
   </div>
 $endfor$

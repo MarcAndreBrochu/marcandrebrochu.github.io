@@ -1,16 +1,12 @@
 <article>
   <h1>$title$</h1>
   <div class="taxonomies-wrapper">
-    <ul class="taxonomies">
-      $for(tags)$
-        <li>
-          <a class="taxonomy" href="/tags.html#$tag$">
-            <span>$tag$</span>
-            <span class="taxonomy-count">$tag-count$</span>
-          </a>
-        </li>
-      $endfor$
-    </ul>
+    $for(tags)$
+      <a class="taxonomy" href="/tags.html#$tag$">
+        <span>$tag$</span>
+        <span class="taxonomy-count">$tag-count$</span>
+      </a>
+    $endfor$
   </div>
   $contents$
 </article>

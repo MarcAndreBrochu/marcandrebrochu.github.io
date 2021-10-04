@@ -1,16 +1,12 @@
 <article>
   <h1>$title$</h1>
   <div class="taxonomies-wrapper">
-    <ul class="taxonomies">
-      $for(years)$
-        <li>
-          <a class="taxonomy" href="/archive.html#$year$">
-            <span>$year$</span>
-            <span class="taxonomy-count">$year-count$</span>
-          </a>
-        </li>
-      $endfor$
-    </ul>
+    $for(years)$
+      <a class="taxonomy" href="/archive.html#$year$">
+        <span>$year$</span>
+        <span class="taxonomy-count">$year-count$</span>
+      </a>
+    $endfor$
   </div>
   $for(years)$
     <h2 id="$year$">$year$</h2>

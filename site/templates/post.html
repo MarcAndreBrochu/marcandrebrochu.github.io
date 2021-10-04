@@ -1,23 +1,22 @@
-<article class="post">
-  <section class="post-header">
+<article>
+  <header>
     <h1 class="post-title">$title$</h1>
     <div class="post-meta">
-      <time>$date$</time>
+      <time class="post-date">$date$</time>
       $if(tags)$
-        <span> • </span>
-        <span class="post-tags-section">
+        <div class="post-tags">
           <svg class="post-tags-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
             $snippet("snippets/tag.svg")$
           </svg>
-        </span>
-        <ul class="post-tags">
-          $for(tags)$
-            <li><a class="post-tag" href="/tags.html#$tag$">$tag$</a></li>
-          $endfor$
-        </ul>
+          <ul class="post-tags-list">
+            $for(tags)$
+              <li><a class="post-tag" href="/tags.html#$tag$">$tag$</a></li>
+            $endfor$
+          </ul>
+        </div>
       $endif$
     </div>
-  </section>
+  </header>
   <section>
     $body$
   </section>
