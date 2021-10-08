@@ -6,3 +6,7 @@ tags: cool, animaux forestiers, jungle
 Je veux vous raconter l'histoire............
 
 <!--more-->
+
+$$a^2 + b^2 = c^2$$
+
+This is trivial: $\forall a\in\mathbb{Z}, a=a$ blah blah.

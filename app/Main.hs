@@ -15,7 +15,7 @@ import Data.Time.Locale.Compat (TimeLocale, defaultTimeLocale)
 import Data.Typeable (Typeable)
 import Hakyll
 import Text.Pandoc.Highlighting (Style, breezeDark, styleToCss)
-import Text.Pandoc.Options (ReaderOptions(..), WriterOptions(..))
+import Text.Pandoc.Options (ReaderOptions(..), WriterOptions(..), HTMLMathMethod(..))
 
 pandocCodeStyle :: Style
 pandocCodeStyle = breezeDark
@@ -169,4 +169,5 @@ pandocCompiler' = pandocCompilerWith
     defaultHakyllReaderOptions
     defaultHakyllWriterOptions
         { writerHighlightStyle = Just pandocCodeStyle
+        , writerHTMLMathMethod = MathML
         }
