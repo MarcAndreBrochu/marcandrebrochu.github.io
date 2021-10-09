@@ -80,7 +80,7 @@ main = hakyllWith config $ do
     create ["archive.html"] $ do
         route idRoute
         compile $ do
-            posts <- loadAll "posts/*"
+            posts <- loadAll "posts/*.md"
             years <- (reverse . sortOn fst) <$> buildYears posts
             let ctx = archiveCtx years
             makeItem ""
@@ -89,7 +89,7 @@ main = hakyllWith config $ do
                 >>= relativizeUrls
 
     -- Builds a map from tags to posts with that tag.
-    tags <- buildTagsWith getNormalizedTags "posts/*" (fromCapture "tags/*")
+    tags <- buildTagsWith getNormalizedTags "posts/*.md" (fromCapture "tags/*")
 
     tagsRules tags $ \tag pattern -> compile $ do
         posts <- recentFirst =<< loadAll pattern
@@ -120,7 +120,7 @@ main = hakyllWith config $ do
                 >>= loadAndApplyTemplate "templates/default.html" ctx
                 >>= relativizeUrls
 
-    match "posts/*" $ do
+    match "posts/*.md" $ do
         route $ setExtension "html"
         compile $ do
             pandocCompiler'
@@ -132,7 +132,7 @@ main = hakyllWith config $ do
     match "index.html" $ do
         route idRoute
         compile $ do
-            posts <- loadRecent 2 "posts/*"
+            posts <- loadRecent 2 "posts/*.md"
             let listCtx =
                     teaserField "excerpt" "content" <>
                     postCtx
