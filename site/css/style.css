@@ -36,6 +36,7 @@ body {
   background-color: var(--bg-color);
   color: var(--main-color);
   font-family: RobotoSlabReg;
+  line-height: 1.5;
 }
 
 main {
@@ -62,6 +63,13 @@ h1, h2, h3, h4, h5, h6 {
 
 code, pre {
   font-family: IosevkaReg;
+}
+
+blockquote {
+  padding-left: 10px;
+  border-left: 0.25em solid #a5a5a5;
+  opacity: .65;
+  width: 85%;
 }
 
 #main-content {
