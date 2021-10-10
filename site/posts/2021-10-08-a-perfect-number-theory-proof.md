@@ -22,7 +22,7 @@ $$\begin{align}\sigma(n)&=\sigma(2^{p-1})\sigma(2^p-1)\\&=(\sum_{k=1}^{p-1}2^k)\
 A prime number of the form $2^p-1$ is called a *Mersenne prime*. Euclid's result means that each Mersenne prime gives rise to a perfect number. It is not known whether or not there are infinitely many Mersenne primes, but if there were, it would prove that there are infinitely many perfect numbers.
 
 ## Euler's part
-About two millenia after Euclid, Euler proved that any even perfect number must be of the form $2^{p-1}(2^p-1)$ with $2^p-1$ prime. To prove this, he used a simple proof with a very clever idea at a key moment. I still remember the first time I saw this proof. I still find it fascinating. Each simple idea flowing into the other, a logical path, a boat that derives. We start with $n$, an even perfect number. First, we compute $\sigma(n)$ in two different but equal ways. The first way is trivial: because $n$ is perfect, we know that $\sigma(n)=2n$. The second way uses the fact that $n$ is even: we write $n$ as $2^{k-1}m$, with $k>1$ and $m$ odd. Now
+About two millenia after Euclid, Euler proved that any even perfect number must be of the form $2^{p-1}(2^p-1)$ with $2^p-1$ prime. To prove this, he used a simple proof with a very clever idea at a key moment. I still remember the first time I saw this proof. I still find it fascinating. We start with $n$, an even perfect number. First, we compute $\sigma(n)$ in two different but equal ways. The first way is trivial: because $n$ is perfect, we know that $\sigma(n)=2n$. The second way uses the fact that $n$ is even: we write $n$ as $2^{k-1}m$, with $k>1$ and $m$ odd. Now
 
 $$\begin{align}\sigma(n)&=\sigma(2^{k-1})\sigma(m)\\&=(2^k-1)\sigma(m).\end{align}$$
 
