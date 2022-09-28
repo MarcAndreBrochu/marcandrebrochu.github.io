@@ -1,7 +1,20 @@
 ---
-title: Home
+title: Accueil
 ---
-
-<h1>Welcome</h1>
-<p>I'm Marc-André and I write things about stuff I like.</p>
-
+<h1>Bienvenue</h1>
+<img src="images/face.webp" alt="" id="pres-image">
+<p>
+  J'étudie les mathématiques à l'Université du Québec à Montréal (UQÀM). Ce site sert à stocker mes notes personnelles et aussi certaines de mes idées, lorsque j'ai la force de les mettre en mots&nbsp;!
+</p>
+<p>
+  J'ai essayé, autant qu'il m'est possible, de minimiser l'impact écologique de ce site&nbsp;:
+  <ul>
+    <li>pas de Javascript ici&nbsp;: les équations sont simplement des images &laquo;&nbsp;incrustées&nbsp;&raquo; (<em>embedded</em>) dans la page et qui sont générées à partir de code LaTeX au moment où je compile le site;</li>
+    <li>bien que je puisse écrire mes posts en Markdown grâce à Pandoc via Hakyll, ils deviennent de très simples pages HTML, très légères et rapides à charger;</li>
+    <li>j'ai écris le CSS moi-même afin de m'assurer qu'il soit optimal (pas de classes orphelines);</li>
+    <li>les images décoratives sont au format WEBP plutôt que PNG, JPEG ou autre, afin de minimiser leur taille.</li>
+  </ul>
+</p>
+<p>
+  J'avais à l'origine simplement demandé à Pandoc de générer du MathML à partir de mon code LaTeX dans les articles. Ça marchait très bien mais seulement sur Firefox, puisque plusieurs moteurs de rendu (y compris WebKit et Blink) ne supportent pas encore MathML. Pour l'instant j'y vais donc avec la solution de rendre les équations en images, puis de les inclure de façon automatique dans mes articles.
+</p>

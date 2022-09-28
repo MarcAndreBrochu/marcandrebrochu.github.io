@@ -72,6 +72,12 @@ blockquote {
   width: 85%;
 }
 
+#pres-image {
+  float: right;
+  width: 300px;
+  margin-left: 1em;
+}
+
 #main-content {
   margin-left: var(--sidenav-width);
 }
@@ -175,7 +181,7 @@ blockquote {
 }
 
 #banner {
-  background-image: url("/images/striped.jpg");
+  background-image: url("/images/kandinsky.webp");
   background-repeat: repeat-x;
   height: var(--banner-height);
 }
