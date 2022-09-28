@@ -10,7 +10,7 @@ import Data.Binary (Binary)
 import Data.List (sortOn)
 import Data.Map qualified as M
 import Data.Monoid ((<>))
-import Data.Time.Format (formatTime)
+import Data.Time.Format (formatTime, months)
 import Data.Time.Locale.Compat (TimeLocale, defaultTimeLocale)
 import Data.Typeable (Typeable)
 import Hakyll
@@ -27,6 +27,25 @@ config = defaultConfiguration
     }
 
 type Year = Int
+
+frenchTimeLocale :: TimeLocale
+frenchTimeLocale = defaultTimeLocale
+    { months =
+        [ ("janvier", "jan")
+        , ("février", "fév")
+        , ("mars", "mar")
+        , ("avril", "avr")
+        , ("mai", "mai")
+        , ("juin", "juin")
+        , ("juillet", "juil")
+        , ("août", "août")
+        , ("septembre", "sep")
+        , ("octobre", "oct")
+        , ("novembre", "nov")
+        , ("décembre", "déc")
+        ]
+    }
+
 
 getYear :: (MonadMetadata m, MonadFail m) => Identifier -> m Year
 getYear articleId = do
@@ -55,7 +74,7 @@ archiveCtx years =
         field "year-count" (pure . show .length . snd . itemBody) <>
         listFieldWith "posts" postsCtx (pure . snd . itemBody)
     postsCtx =
-        dateField "date" "%B %e" <>
+        dateFieldWith frenchTimeLocale "date" "%e %B" <>
         defaultContext
 
 main :: IO ()
@@ -161,7 +180,7 @@ blogCtx =
 
 postCtx :: Context String
 postCtx =
-    dateField "date" "%B %e, %Y" <>
+    dateFieldWith frenchTimeLocale "date" "%e %B %Y" <>
     blogCtx
 
 pandocCompiler' :: Compiler (Item String)
@@ -169,5 +188,5 @@ pandocCompiler' = pandocCompilerWith
     defaultHakyllReaderOptions
     defaultHakyllWriterOptions
         { writerHighlightStyle = Just pandocCodeStyle
-        , writerHTMLMathMethod = MathML
+        , writerHTMLMathMethod = MathJax ""
         }

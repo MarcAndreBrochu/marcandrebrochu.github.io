@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Archive</title>
-    <link rel="stylesheet" href="./css/normalize.css">
-    <link rel="stylesheet" href="./css/syntax.css">
-    <link rel="stylesheet" href="./css/style.css">
+    <title>L'espace tangent du point de vue algébrique</title>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/syntax.css">
+    <link rel="stylesheet" href="../css/style.css">
   </head>
   <body>
     <div id="sidebar">
@@ -20,9 +20,9 @@
           </header>
           <nav id="site-nav">
             <ul>
-              <li><a href="./">Accueil</a></li>
-              <li><a href="./archive.html">Articles</a></li>
-              <li><a href="./tags.html">Tags</a></li>
+              <li><a href="../">Accueil</a></li>
+              <li><a href="../archive.html">Articles</a></li>
+              <li><a href="../tags.html">Tags</a></li>
             </ul>
           </nav>
         </div>
@@ -62,41 +62,37 @@
       <div id="banner"></div>
       <main>
         <article>
-  <h1>Archive</h1>
-  <div class="taxonomies-wrapper">
-    
-      <a class="taxonomy" href="./archive.html#2022">
-        <span>2022</span>
-        <span class="taxonomy-count">1</span>
-      </a>
-    
-      <a class="taxonomy" href="./archive.html#2021">
-        <span>2021</span>
-        <span class="taxonomy-count">1</span>
-      </a>
-    
-  </div>
-  
-    <h2 id="2022">2022</h2>
-    <ul class="post-list-by-taxonomy">
+  <header>
+    <h1 class="post-title">L'espace tangent du point de vue algébrique</h1>
+    <div class="post-meta">
+      <time class="post-date">28 septembre 2022</time>
       
-        <li>
-          <time>28 septembre</time>
-          <a href="./posts/2022-09-28-differentielle-locale.html">L'espace tangent du point de vue algébrique</a>
-        </li>
+        <div class="post-tags">
+          <svg class="post-tags-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path fill="currentColor" d="M0 252.118V48C0 21.49 21.49 0 48 0h204.118a48 48 0 0 1 33.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137 0 67.882L293.823 497.941c-18.745 18.745-49.137 18.745-67.882 0L14.059 286.059A48 48 0 0 1 0 252.118zM112 64c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48z"></path>
+
+          </svg>
+          <ul class="post-tags-list">
+            
+              <li><a class="post-tag" href="../tags.html#géométrie">géométrie</a></li>
+            
+              <li><a class="post-tag" href="../tags.html#notes">notes</a></li>
+            
+          </ul>
+        </div>
       
-    </ul>
-  
-    <h2 id="2021">2021</h2>
-    <ul class="post-list-by-taxonomy">
-      
-        <li>
-          <time> 8 octobre</time>
-          <a href="./posts/2021-10-08-a-perfect-number-theory-proof.html">A perfect number theory proof</a>
-        </li>
-      
-    </ul>
-  
+    </div>
+  </header>
+  <section>
+    <p>L’espace des germes de fonctions en <span class="math inline">\(p\in M\)</span> est l’ensemble quotient <span class="math inline">\(\mathcal{C}^\infty(p) = \{\ f : U \to \mathbb{R}\ |\ \text{$U$ est un voisinage ouvert de $p$}\ \}/\sim\)</span> modulo l’équivalence donnée par <span class="math inline">\(f\sim g\)</span></p>
+<p>Une dérivation en un point <span class="math inline">\(p\)</span> de <span class="math inline">\(M\)</span> est une fonction <span class="math inline">\(X : \mathcal{C}^\infty(p) \to \mathbb{R}\)</span>.</p>
+<p>L’ensemble des dérivations au point <span class="math inline">\(p\)</span> est l’espace tangent <span class="math inline">\(T_pM\)</span>.</p>
+<p><span class="math display">\[\begin{align}
+dF : T_pM \to T_{F(p)}N\\
+X \mapsto X\circ F^\star
+\end{align}\]</span></p>
+<p>Yes mon gars, comment ca va?</p>
+  </section>
 </article>
 
       </main>
