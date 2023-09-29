@@ -9,9 +9,9 @@ Une dérivation en un point $p$ de $M$ est une fonction $X : \mathcal{C}^\infty(
 
 L'ensemble des dérivations au point $p$ est l'espace tangent $T_pM$.
 
-$$\begin{align}
+\begin{align}
 dF : T_pM \to T_{F(p)}N\\
 X \mapsto X\circ F^\star
-\end{align}$$
+\end{align}
 
 Yes mon gars, comment ca va?

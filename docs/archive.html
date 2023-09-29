@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="./css/normalize.css">
     <link rel="stylesheet" href="./css/syntax.css">
     <link rel="stylesheet" href="./css/style.css">
+
+    <!-- MathJax setup. TODO: Only load MathJax in pages where it's needed. -->
+    <script src="./js/load-mathjax.js" async></script>
   </head>
   <body>
     <div id="sidebar">
@@ -65,6 +68,11 @@
   <h1>Archive</h1>
   <div class="taxonomies-wrapper">
     
+      <a class="taxonomy" href="./archive.html#2023">
+        <span>2023</span>
+        <span class="taxonomy-count">2</span>
+      </a>
+    
       <a class="taxonomy" href="./archive.html#2022">
         <span>2022</span>
         <span class="taxonomy-count">1</span>
@@ -76,6 +84,21 @@
       </a>
     
   </div>
+  
+    <h2 id="2023">2023</h2>
+    <ul class="post-list-by-taxonomy">
+      
+        <li>
+          <time>11 avril</time>
+          <a href="./posts/2023-04-11-radical-intersection.html">Le radical est l'intersection des idéaux maximaux</a>
+        </li>
+      
+        <li>
+          <time>17 février</time>
+          <a href="./posts/2023-02-17-serie-de-laurent.html">L'existence et l'unicité de l'extension en série de Laurent</a>
+        </li>
+      
+    </ul>
   
     <h2 id="2022">2022</h2>
     <ul class="post-list-by-taxonomy">

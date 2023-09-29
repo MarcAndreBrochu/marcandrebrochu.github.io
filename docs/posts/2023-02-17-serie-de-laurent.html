@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>L'existence et l'unicité de l'extension en série de Laurent</title>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/syntax.css">
+    <link rel="stylesheet" href="../css/style.css">
+
+    <!-- MathJax setup. TODO: Only load MathJax in pages where it's needed. -->
+    <script src="../js/load-mathjax.js" async></script>
+  </head>
+  <body>
+    <div id="sidebar">
+      <div id="sidebar-top-container">
+        <div id="sidebar-top">
+          <header id="site-header">
+            <p id="site-title">
+              Marc-André<br>
+              Brochu
+            </p>
+          </header>
+          <nav id="site-nav">
+            <ul>
+              <li><a href="../">Accueil</a></li>
+              <li><a href="../archive.html">Articles</a></li>
+              <li><a href="../tags.html">Tags</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <footer id="site-footer">
+        <div id="social-icons">
+          <a class="social-icon" href="https://github.com/marcandrebrochu" target="_blank">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 512 512">
+              <title>GitHub</title><path d="M255.968,5.329C114.624,5.329,0,120.401,0,262.353c0,113.536,73.344,209.856,175.104,243.872 c12.8,2.368,17.472-5.568,17.472-12.384c0-6.112-0.224-22.272-0.352-43.712c-71.2,15.52-86.24-34.464-86.24-34.464 c-11.616-29.696-28.416-37.6-28.416-37.6c-23.264-15.936,1.728-15.616,1.728-15.616c25.696,1.824,39.2,26.496,39.2,26.496 c22.848,39.264,59.936,27.936,74.528,21.344c2.304-16.608,8.928-27.936,16.256-34.368 c-56.832-6.496-116.608-28.544-116.608-127.008c0-28.064,9.984-51.008,26.368-68.992c-2.656-6.496-11.424-32.64,2.496-68 c0,0,21.504-6.912,70.4,26.336c20.416-5.696,42.304-8.544,64.096-8.64c21.728,0.128,43.648,2.944,64.096,8.672 c48.864-33.248,70.336-26.336,70.336-26.336c13.952,35.392,5.184,61.504,2.56,68c16.416,17.984,26.304,40.928,26.304,68.992 c0,98.72-59.84,120.448-116.864,126.816c9.184,7.936,17.376,23.616,17.376,47.584c0,34.368-0.32,62.08-0.32,70.496 c0,6.88,4.608,14.88,17.6,12.352C438.72,472.145,512,375.857,512,262.353C512,120.401,397.376,5.329,255.968,5.329z"></path>
+
+            </svg>
+          </a>
+          <a class="social-icon" href="mailto:marcandrebrochu@fastmail.com" target="_blank">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 512 512">
+              <path d="M507.49,101.721L352.211,256L507.49,410.279c2.807-5.867,4.51-12.353,4.51-19.279V121 C512,114.073,510.297,107.588,507.49,101.721z"></path><path d="M467,76H45c-6.927,0-13.412,1.703-19.279,4.51l198.463,197.463c17.548,17.548,46.084,17.548,63.632,0L486.279,80.51 C480.412,77.703,473.927,76,467,76z"></path><path d="M4.51,101.721C1.703,107.588,0,114.073,0,121v270c0,6.927,1.703,13.413,4.51,19.279L159.789,256L4.51,101.721z"></path><path d="M331,277.211l-21.973,21.973c-29.239,29.239-76.816,29.239-106.055,0L181,277.211L25.721,431.49 C31.588,434.297,38.073,436,45,436h422c6.927,0,13.412-1.703,19.279-4.51L331,277.211z"></path>
+
+            </svg>
+          </a>
+        </div>
+        <div id="text">
+          <p>
+            <small>
+              Fièrement propulsé par
+              <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+            </small>
+          </p>
+          <p>
+            <small>
+              Design par
+              <a href="https://studionuancia.com" target="_blank">Studio Nuancia</a>
+            </small>
+          </p>
+        </div>
+      </footer>
+    </div>
+    <div id="main-content">
+      <div id="banner"></div>
+      <main>
+        <article>
+  <header>
+    <h1 class="post-title">L'existence et l'unicité de l'extension en série de Laurent</h1>
+    <div class="post-meta">
+      <time class="post-date">17 février 2023</time>
+      
+        <div class="post-tags">
+          <svg class="post-tags-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path fill="currentColor" d="M0 252.118V48C0 21.49 21.49 0 48 0h204.118a48 48 0 0 1 33.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137 0 67.882L293.823 497.941c-18.745 18.745-49.137 18.745-67.882 0L14.059 286.059A48 48 0 0 1 0 252.118zM112 64c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48z"></path>
+
+          </svg>
+          <ul class="post-tags-list">
+            
+              <li><a class="post-tag" href="../tags.html#analyse-complexe">analyse-complexe</a></li>
+            
+              <li><a class="post-tag" href="../tags.html#notes">notes</a></li>
+            
+          </ul>
+        </div>
+      
+    </div>
+  </header>
+  <section>
+    <p>Soit <span class="math inline">\(\Omega\)</span> un domaine et <span class="math inline">\(f:\Omega\to\mathbb{C}\)</span> une fonction holomorphe.</p>
+<p>Je prend un <span class="math inline">\(z\in A\)</span></p>
+<p><span class="math inline">\(\gamma_1(t) = r_1e^{-it}\)</span> et <span class="math inline">\(\gamma_2(t) = r_2e^{it}\)</span>.</p>
+<p>(Expliquer) Par la formule intégrale de Cauchy on a que
+<span class="math display">\[\begin{equation}
+f(z) = \frac{1}{2\pi i}\left(\oint_{\gamma_1} \frac{f(w)}{w-z}dz + \oint_{\gamma_2} \frac{f(w)}{w-z}dz\right)
+\end{equation}\]</span></p>
+<h1 id="existence-de-lextension">Existence de l’extension</h1>
+<h2 id="développement-de-la-partie-principale">Développement de la partie principale</h2>
+<p>Lorsque <span class="math inline">\(w\)</span> est sur le chemin <span class="math inline">\(\gamma_1\)</span>, on a que
+<span class="math display">\[\begin{align}
+\frac{1}{w-z} &amp;= \frac{1}{(w-a)-(z-a)} = \frac{1}{w-a}\cdot\frac{1}{1-\frac{z-a}{w-a}}\\
+&amp;= \frac{1}{w-a}\frac{-(w-a)}{z-a}\sum_{n=0}^{\infty}\left(\frac{w-a}{z-a}\right)^n\\
+&amp;= \frac{-1}{w-a}\sum_{n=1}^\infty \left(\frac{w-a}{z-a}\right)^n
+\end{align}\]</span>
+puisque <span class="math inline">\(|\frac{z-a}{w-a}|&gt;1\)</span> il faut utiliser l’autre formule pour une série géométrique.</p>
+<p>Puisque <span class="math inline">\(w\)</span> est sur le chemin <span class="math inline">\(\gamma_1\)</span>, la distance entre <span class="math inline">\(w\)</span> et <span class="math inline">\(a\)</span> est plus petite que celle entre <span class="math inline">\(z\)</span> et <span class="math inline">\(a\)</span>. Donc pour tout <span class="math inline">\(w\)</span>, <span class="math inline">\(|\frac{w-a}{z-a}|\leq \rho &lt; 1\)</span> pour un certain <span class="math inline">\(\rho\)</span> réel positif et <span class="math inline">\(|\frac{w-a}{z-a}|^n\leq \rho^n\)</span> pour tout <span class="math inline">\(n\)</span>. Comme <span class="math inline">\(f\)</span> est continue sur <span class="math inline">\(\gamma_1\)</span>, elle est localement bornée et par compacité de <span class="math inline">\(\gamma_1\)</span> bornée par un certain réel <span class="math inline">\(C\)</span>. Donc pour tout <span class="math inline">\(w\in\gamma_1\)</span> et pour tout <span class="math inline">\(n\)</span>,
+<span class="math display">\[\begin{equation}
+\left|\frac{f(w)}{w-a}\cdot\left(\frac{w-a}{z-a}\right)^n\right|\leq C\rho^n
+\end{equation}\]</span></p>
+<p>Par le test M de Weierstrass, la série <span class="math display">\[\sum_{n=1}^\infty \frac{f(w)(w-a)^{n-1}}{(z-a)^n}\]</span> converge absolument et uniformément sur <span class="math inline">\(\gamma_1\)</span>.</p>
+<p>On peut commuter l’intégration et la somme:
+<span class="math display">\[\begin{align}
+\frac{1}{2\pi i}\oint_{\gamma_1} \frac{f(w)}{w-z}dw &amp;= \frac{1}{2\pi i}\oint_{\gamma_1}\sum_{n=1}^\infty\frac{-f(w)(w-a)^{n-1}}{(z-a)^n}dw\\
+&amp;= \frac{-1}{2\pi i}\sum_{n=1}^\infty \oint_{\gamma_1} \frac{f(w)(w-a)^{n-1}}{(z-a)^n}dw\\
+&amp;= \frac{1}{2\pi i}\sum_{n=-\infty}^{-1}\oint_{-\gamma_1} \frac{f(w)}{w-a}\left(\frac{z-a}{w-a}\right)^ndw\\
+&amp;= \sum_{n=-\infty}^{-1}(z-a)^n\frac{1}{2\pi i}\oint_{-\gamma_1} \frac{f(w)}{(w-a)^{n+1}}dw
+\end{align}\]</span></p>
+<h2 id="développement-de-la-partie-de-taylor">Développement de la partie de Taylor</h2>
+<p>En procédant de façon similaire à la partie précédente, je trouve que
+<span class="math display">\[ \frac{f(w)}{w-z} = \frac{f(w)}{w-a}\sum_{n=0}^\infty \left(\frac{z-a}{w-a}\right)^n\]</span> converge absolument et uniformément sur <span class="math inline">\(\gamma_2\)</span>.</p>
+<p>Donc
+<span class="math display">\[\begin{align}
+\frac{1}{2\pi i}\oint_{\gamma_2}\frac{f(w)}{w-z}dw &amp;= \frac{1}{2\pi i}\oint_{\gamma_2}\frac{f(w)}{w-a}\sum_{n=0}^\infty\left(\frac{z-a}{w-a}\right)^ndw\\
+&amp;= \frac{1}{2\pi i}\sum_{n=0}^\infty \oint_{\gamma_2}\frac{f(w)(z-a)^n}{(w-a)^{n+1}}dw\\
+&amp;= \sum_{n=0}^\infty (z-a)^n\frac{1}{2\pi i}\oint_{\gamma_2}\frac{f(w)}{(w-a)^{n+1}}dw
+\end{align}\]</span></p>
+<h2 id="on-recolle-tout">On recolle tout</h2>
+<p><span class="math display">\[\begin{align}
+f(z) &amp;= \frac{1}{2\pi i}\left(\oint_{\gamma_1} \frac{f(w)}{w-z}dz + \oint_{\gamma_2} \frac{f(w)}{w-z}dz\right)\\
+&amp;= \sum_{n=-\infty}^{-1}(z-a)^n\frac{1}{2\pi i}\oint_{-\gamma_1} \frac{f(w)}{(w-a)^{n+1}}dw + \sum_{n=0}^\infty (z-a)^n\frac{1}{2\pi i}\oint_{\gamma_2}\frac{f(w)}{(w-a)^{n+1}}dw
+\end{align}\]</span></p>
+<p>Puisque <span class="math inline">\(-\gamma_1\)</span> est homotope à <span class="math inline">\(\gamma_2\)</span> dans l’anneau, l’intégrale d’une même fonction le long de ces chemins donne le même résultat. Ainsi on peut écrire <span class="math display">\[f(z)=\sum_{n=-\infty}^\infty c_n(z-a)^n\]</span>
+où
+<span class="math display">\[c_n = \frac{1}{2\pi i}\oint_\gamma \frac{f(w)}{(w-a)^{n+1}}dw\]</span> avec <span class="math inline">\(\gamma\)</span> un lacet quelconque dans l’anneau.</p>
+<h1 id="unicité-de-lextension">Unicité de l’extension</h1>
+<p>On suppose qu’on a deux extensions en série de Laurent pour <span class="math inline">\(f\)</span> en <span class="math inline">\(z\)</span>:
+<span class="math display">\[f(z) = \sum_{n=-\infty}^\infty c_n(z-a)^n = \sum_{n=-\infty}^\infty c_n'(z-a)^n\]</span></p>
+<p>On multiplie des deux côtés par <span class="math inline">\((z-a)^{-k-1}\)</span> pour <span class="math inline">\(k\)</span> un entier arbitraire et on intègre sur <span class="math inline">\(\gamma\)</span> un lacet dans l’anneau.
+<span class="math display">\[\oint_\gamma \sum_{n=-\infty}^\infty c_n(z-a)^{n-k-1}dz = \oint_\gamma \sum_{n=-\infty}^\infty c_n'(z-a)^{n-k-1}dz\]</span></p>
+<p>Ces séries convergent absolument et uniformément sur <span class="math inline">\(r+\varepsilon\leq |z-a|\leq R-\varepsilon\)</span> où <span class="math inline">\(\varepsilon\)</span> est un nombre assez petit pour que <span class="math inline">\(\gamma\)</span> soit complètement contenu dans l’anneau restreint. Donc l’intégration et la sommation peuvent être interchangées:
+<span class="math display">\[\sum_{n=-\infty}^\infty c_n\oint_\gamma (z-a)^{n-k-1}dz = \sum_{n=-\infty}^\infty c_n'\oint_\gamma (z-a)^{n-k-1}dz\]</span>
+et l’identité
+<span class="math display">\[\oint_\gamma (z-a)^{n-k-1}dz = 2\pi i\delta_{nk}\]</span>
+avec <span class="math inline">\(\delta_{ij}\)</span> le delta de Kronecker, permet de conclure.</p>
+  </section>
+</article>
+
+      </main>
+    </div>
+  </body>
+</html>
